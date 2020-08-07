@@ -31,7 +31,7 @@ class _HomeState extends State<Home> {
   double dolar;
   double euro;
 
-  void _realChange(String text) {
+  void _convert(String text) {
     if(text.isEmpty) {
       _clearAll();
       return;
@@ -39,30 +39,6 @@ class _HomeState extends State<Home> {
     double real = double.parse(text);
     dolarController.text = (real/dolar).toStringAsFixed(2);
     euroController.text = (real/euro).toStringAsFixed(2);
-
-  }
-
-
-  void _dolarChange(String text) {
-    if(text.isEmpty) {
-      _clearAll();
-      return;
-    }
-    double dolar = double.parse(text);
-    realController.text = (dolar * this.dolar).toStringAsFixed(2);
-    euroController.text = (dolar * this.dolar / euro).toStringAsFixed(2);
-
-  }
-
-  void _euroChange(String text) {
-    if(text.isEmpty) {
-      _clearAll();
-      return;
-    }
-    double euro = double.parse(text);
-    realController.text = (euro * this.euro).toStringAsFixed(2);
-    dolarController.text = (euro * this.euro / dolar).toStringAsFixed(2);
-
   }
 
   void _clearAll(){
@@ -113,14 +89,14 @@ class _HomeState extends State<Home> {
                         children: <Widget>[
                           Icon(Icons.monetization_on,
                               size: 150.0, color: Colors.amber),
-                          buildTextFormField("Reais", "R\$", realController, null, true),
+                          buildTextFormField("Reais", "R\$", realController, true),
                           Divider(),
-                          buildTextFormField("Dólar", "US\$", dolarController, null, false),
+                          buildTextFormField("Dólar", "US\$", dolarController, false),
                           Divider(),
-                          buildTextFormField("Euro", "EUR", euroController, null, false),
+                          buildTextFormField("Euro", "EUR", euroController, false),
                           Divider(),
                           FloatingActionButton.extended(
-                            onPressed: () => _realChange(realController.text),
+                            onPressed: () => _convert(realController.text),
                             tooltip: 'Obter cotação',
                             label: Text('Obter Cotação'),
                             foregroundColor: Colors.black,
@@ -136,9 +112,8 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildTextFormField(String label, String prefix,
-      TextEditingController controller, Function f, bool enable) {
+      TextEditingController controller, bool enable) {
     return TextField(
-      onChanged: f,
       controller: controller,
       decoration: InputDecoration(
           labelText: label,
